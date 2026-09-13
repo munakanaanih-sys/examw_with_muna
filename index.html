@@ -290,6 +290,47 @@
   .status-msg.error{color:var(--coral-500);}
   .fallback-block{margin-top:18px;padding-top:18px;border-top:1px solid var(--line);}
 
+  .launch-buttons{
+    display:flex;
+    gap:12px;
+    flex-wrap:wrap;
+    margin:16px 0 10px;
+  }
+  .launch-btn{
+    flex:1 1 200px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap:9px;
+    background:var(--teal-900);
+    color:var(--paper);
+    border:none;
+    padding:14px 16px;
+    border-radius:12px;
+    font-size:15px;
+    font-weight:700;
+    transition:transform .15s ease, background .15s ease;
+  }
+  .launch-btn:hover{background:var(--teal-700);transform:translateY(-1px);}
+  .launch-icon{color:var(--gold-500);font-size:14px;}
+
+  .launch-note{
+    font-size:13px;
+    color:var(--ink-soft);
+    margin:0 0 4px;
+  }
+
+  .manual-details{margin-top:14px;}
+  .manual-details summary{
+    cursor:pointer;
+    font-size:13.5px;
+    font-weight:600;
+    color:var(--ink-soft);
+    padding:6px 0;
+  }
+  .manual-details[open] summary{color:var(--teal-900);}
+  .manual-details .prompt-box{margin-top:10px;}
+
   .spinner{
     display:inline-block;
     width:16px;height:16px;
@@ -412,10 +453,22 @@
 
     <div class="fallback-block" id="fallbackBlock" style="display:none;">
       <p class="prompt-hint" id="txt-fallbackhint"></p>
-      <div class="prompt-box" id="fallbackPromptBox"></div>
-      <button class="copy-btn" id="fallbackCopyBtn">
-        <span id="fallbackCopyLabel"></span>
-      </button>
+      <div class="launch-buttons">
+        <button class="launch-btn" id="launchClaudeBtn" data-url="https://claude.ai/new">
+          <span class="launch-icon">✦</span><span id="launchClaudeLabel"></span>
+        </button>
+        <button class="launch-btn" id="launchChatgptBtn" data-url="https://chatgpt.com/">
+          <span class="launch-icon">✦</span><span id="launchChatgptLabel"></span>
+        </button>
+      </div>
+      <p class="launch-note" id="txt-launchnote"></p>
+      <details class="manual-details">
+        <summary id="txt-manualsummary"></summary>
+        <div class="prompt-box" id="fallbackPromptBox"></div>
+        <button class="copy-btn" id="fallbackCopyBtn">
+          <span id="fallbackCopyLabel"></span>
+        </button>
+      </details>
     </div>
   </div>
 
@@ -536,7 +589,11 @@ ar:{dir:'rtl', font:'lang-ar', title:'ومضات ذكية', subtitle:'المنص
   resultstitle:'نتيجة التحليل', errorNoFile:'الرجاء رفع ملف الامتحان أولاً (Word أو PDF)', errorGeneral:'حدث خطأ أثناء التحليل، حاولي مرة أخرى',
   errorParse:'تعذّرت قراءة الملف، جرّبي ملفاً آخر', footer:'صُممت هذه المنصة لدعم المعلمين في رحلتهم نحو تقييم أفضل',
   revisionbtn:'اطلب اقتراح امتحان معدّل بناءً على هذا التحليل', revisionloading:'جارٍ إعداد الامتحان المعدّل...', revisedtitle:'الامتحان المعدّل المقترح', revisionerror:'تعذّر إعداد الامتحان المعدّل، حاولي مرة أخرى',
-  fallbackhint:'التحليل التلقائي لا يعمل من هذا الموقع. انسخي النص التالي وألصقيه مباشرة في أي محرك ذكاء اصطناعي (مثل Claude أو ChatGPT) للحصول على نفس التحليل:', fallbackcopy:'نسخ النص', fallbackcopied:'تم النسخ!'},
+  fallbackhint:'التحليل الكامل والتلقائي يحتاج مفتاح API خاص، ولأسباب أمنية ما بينحط داخل صفحة عامة. اضغطي أحد الزرّين تحت: رح ينسخلك النص المخصّص لامتحانك تلقائياً ويفتحلك أداة الذكاء الاصطناعي، وما عليكِ إلا تلصقيه هناك لتحصلي على التحليل كاملاً فوراً:',
+  launchclaude:'افتحي مع Claude', launchchatgpt:'افتحي مع ChatGPT',
+  launchnote:'كلا الأداتين ممتازتان لهذا النوع من التحليل التربوي المفصّل، وتنتجان جداول منظمة وإجابات طويلة وواضحة.',
+  manualsummary:'أو انسخي النص يدوياً لاستخدامه في أداة أخرى',
+  fallbackcopy:'نسخ النص', fallbackcopied:'تم النسخ!'},
 
 he:{dir:'rtl', font:'lang-he', title:'ניצוצות חכמים', subtitle:'הפלטפורמה החכמה לבניית מבחנים', manager:'בניהול: מונא מוסטפא',
   welcome:'ברוכה הבאה, מורה יקרה. פלטפורמה זו נועדה ללוות אותך בבדיקת המבחנים שלך, בבחינת המבנה והאיכות שלהם, ובווידוא התאמתם ככלי הערכה מדויק והוגן לתלמידייך.',
@@ -548,7 +605,11 @@ he:{dir:'rtl', font:'lang-he', title:'ניצוצות חכמים', subtitle:'הפ
   resultstitle:'תוצאות הניתוח', errorNoFile:'יש להעלות קודם את קובץ המבחן (Word או PDF)', errorGeneral:'אירעה שגיאה בניתוח, נסי שוב',
   errorParse:'לא ניתן היה לקרוא את הקובץ, נסי קובץ אחר', footer:'פלטפורמה זו נבנתה כדי לתמוך במורות ובמורים במסע לקראת הערכה טובה יותר',
   revisionbtn:'בקשי הצעה למבחן מתוקן על סמך הניתוח הזה', revisionloading:'המבחן המתוקן בהכנה...', revisedtitle:'המבחן המתוקן המוצע', revisionerror:'לא ניתן היה להכין את המבחן המתוקן, נסי שוב',
-  fallbackhint:'הניתוח האוטומטי אינו פועל מהאתר הזה. העתיקי את הטקסט הבא והדביקי אותו ישירות בכל מנוע בינה מלאכותית (כמו Claude או ChatGPT) כדי לקבל את אותו ניתוח:', fallbackcopy:'העתקת הטקסט', fallbackcopied:'הועתק!'},
+  fallbackhint:'ניתוח מלא ואוטומטי דורש מפתח API פרטי, ומטעמי אבטחה אי אפשר להטמיע אותו בעמוד ציבורי. לחצי על אחד משני הכפתורים למטה: הטקסט המותאם למבחן שלך יועתק אוטומטית וייפתח כלי הבינה המלאכותית, כל שנותר הוא להדביק שם ולקבל את הניתוח המלא מיד:',
+  launchclaude:'פתחי ב-Claude', launchchatgpt:'פתחי ב-ChatGPT',
+  launchnote:'שני הכלים מצוינים לניתוח חינוכי מפורט מסוג זה, ומפיקים טבלאות מסודרות ותשובות ברורות ומקיפות.',
+  manualsummary:'או העתיקי את הטקסט ידנית לשימוש בכלי אחר',
+  fallbackcopy:'העתקת הטקסט', fallbackcopied:'הועתק!'},
 
 en:{dir:'ltr', font:'lang-en', title:'Smart Sparks', subtitle:'The Smart Platform for Building Exams', manager:'Managed by: Mona Mostafa',
   welcome:'Welcome, dear teacher. This platform is here to support you in reviewing your exams, examining their structure and quality, and confirming how well they work as a fair, accurate assessment tool for your students.',
@@ -560,7 +621,11 @@ en:{dir:'ltr', font:'lang-en', title:'Smart Sparks', subtitle:'The Smart Platfor
   resultstitle:'Analysis results', errorNoFile:'Please upload the exam file first (Word or PDF)', errorGeneral:'Something went wrong, please try again',
   errorParse:'Could not read the file, try another one', footer:'This platform was built to support teachers on their way to better assessment',
   revisionbtn:'Request a revised exam based on this analysis', revisionloading:'Preparing the revised exam...', revisedtitle:'Suggested revised exam', revisionerror:'Could not prepare the revised exam, please try again',
-  fallbackhint:'Automatic analysis does not work from this website. Copy the text below and paste it directly into any AI engine (such as Claude or ChatGPT) to get the same analysis:', fallbackcopy:'Copy text', fallbackcopied:'Copied!'}
+  fallbackhint:'Fully automatic analysis needs a private API key, which cannot be embedded in a public page for security reasons. Click one of the two buttons below: the text tailored to your exam will be copied automatically and the AI tool will open — just paste it there to get the full analysis right away:',
+  launchclaude:'Open in Claude', launchchatgpt:'Open in ChatGPT',
+  launchnote:'Both tools are excellent for this kind of detailed educational analysis, producing organized tables and clear, thorough answers.',
+  manualsummary:'Or copy the text manually to use in another tool',
+  fallbackcopy:'Copy text', fallbackcopied:'Copied!'}
 };
 
 const REVISION_REQUESTS = {
@@ -620,6 +685,10 @@ function applyLang(lang){
   document.getElementById('txt-revisedtitle').textContent = t.revisedtitle;
   document.getElementById('txt-fallbackhint').textContent = t.fallbackhint;
   document.getElementById('fallbackCopyLabel').textContent = t.fallbackcopy;
+  document.getElementById('launchClaudeLabel').textContent = t.launchclaude;
+  document.getElementById('launchChatgptLabel').textContent = t.launchchatgpt;
+  document.getElementById('txt-launchnote').textContent = t.launchnote;
+  document.getElementById('txt-manualsummary').textContent = t.manualsummary;
 
   document.querySelectorAll('.lang-switch button').forEach(b=>{
     b.classList.toggle('active', b.dataset.lang === lang);
@@ -831,6 +900,17 @@ document.getElementById('fallbackCopyBtn').addEventListener('click', async ()=>{
     label.textContent = T[currentLang].fallbackcopied;
     setTimeout(()=>{ btn.classList.remove('copied'); label.textContent = original; }, 1800);
   }catch(err){}
+});
+
+document.querySelectorAll('.launch-btn').forEach(btn=>{
+  btn.addEventListener('click', async ()=>{
+    const text = document.getElementById('fallbackPromptBox').textContent;
+    const url = btn.dataset.url;
+    try{
+      await navigator.clipboard.writeText(text);
+    }catch(err){}
+    window.open(url, '_blank', 'noopener');
+  });
 });
 
 document.getElementById('revisionBtn').addEventListener('click', async ()=>{
