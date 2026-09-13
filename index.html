@@ -1,0 +1,849 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ومضات ذكية</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800&family=Rubik:wght@400;500;600;700;800&family=Outfit:wght@400;500;600;700&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mammoth/1.6.0/mammoth.browser.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+<style>
+  :root{
+    --teal-900:#122B2D;
+    --teal-800:#1A3A3C;
+    --teal-700:#234E50;
+    --gold-500:#E3A23C;
+    --gold-600:#C6862A;
+    --gold-100:#F6E3BE;
+    --coral-500:#D9614C;
+    --paper:#FBF6EA;
+    --paper-dim:#F3EBD9;
+    --ink:#1E2A28;
+    --ink-soft:#54655F;
+    --line:rgba(19,44,46,0.14);
+    --shadow:0 10px 30px rgba(19,44,46,0.10);
+    --radius:18px;
+  }
+
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    background:var(--paper);
+    color:var(--ink);
+    line-height:1.7;
+    -webkit-font-smoothing:antialiased;
+    min-height:100vh;
+  }
+  body.lang-ar, body.lang-he{ font-family:'Cairo','Rubik',sans-serif; }
+  body.lang-he{ font-family:'Rubik','Cairo',sans-serif; }
+  body.lang-en{ font-family:'Outfit',sans-serif; }
+
+  img,svg{display:block;max-width:100%;}
+  button{font-family:inherit;cursor:pointer;}
+  input,textarea{font-family:inherit;}
+
+  /* ---------- Hero ---------- */
+  .hero{
+    position:relative;
+    background:
+      radial-gradient(circle at 18% 20%, rgba(227,162,60,0.16), transparent 45%),
+      radial-gradient(circle at 85% 75%, rgba(217,97,76,0.14), transparent 40%),
+      linear-gradient(160deg, var(--teal-900), var(--teal-700));
+    color:var(--paper);
+    padding:52px 24px 64px;
+    overflow:hidden;
+  }
+  .hero-inner{
+    max-width:760px;
+    margin:0 auto;
+    text-align:center;
+    position:relative;
+    z-index:2;
+  }
+  .lang-switch{
+    display:flex;
+    justify-content:center;
+    gap:6px;
+    margin-bottom:34px;
+  }
+  .lang-switch button{
+    border:1px solid rgba(251,246,234,0.28);
+    background:transparent;
+    color:rgba(251,246,234,0.75);
+    padding:7px 16px;
+    border-radius:999px;
+    font-size:13.5px;
+    font-weight:500;
+    transition:background .2s ease, color .2s ease, border-color .2s ease;
+  }
+  .lang-switch button.active{
+    background:var(--gold-500);
+    border-color:var(--gold-500);
+    color:var(--teal-900);
+    font-weight:700;
+  }
+  .lang-switch button:not(.active):hover{
+    border-color:rgba(251,246,234,0.55);
+    color:var(--paper);
+  }
+
+  .brand-title{
+    font-size:clamp(2.6rem, 6vw, 3.8rem);
+    font-weight:800;
+    margin:0 0 10px;
+    letter-spacing:-0.01em;
+    color:var(--gold-500);
+    text-wrap:balance;
+  }
+  .brand-subtitle{
+    font-size:clamp(1.05rem, 2.4vw, 1.3rem);
+    font-weight:400;
+    color:rgba(251,246,234,0.88);
+    margin:0 0 34px;
+  }
+
+  .logo-frame{
+    width:118px;
+    height:118px;
+    border-radius:50%;
+    margin:0 auto 20px;
+    padding:5px;
+    background:linear-gradient(140deg, var(--gold-500), var(--coral-500));
+    box-shadow:0 14px 28px rgba(0,0,0,0.25);
+  }
+  .logo-frame img{
+    width:100%;
+    height:100%;
+    border-radius:50%;
+    object-fit:cover;
+    background:var(--paper);
+  }
+
+  .manager-tag{
+    display:inline-block;
+    font-size:14px;
+    color:var(--gold-100);
+    border:1px solid rgba(227,162,60,0.4);
+    padding:6px 18px;
+    border-radius:999px;
+    letter-spacing:0.01em;
+  }
+
+  /* ---------- Main content ---------- */
+  main{
+    max-width:720px;
+    margin:0 auto;
+    padding:44px 20px 80px;
+  }
+
+  .card{
+    background:#ffffff;
+    border:1px solid var(--line);
+    border-radius:var(--radius);
+    padding:30px 28px;
+    margin-bottom:26px;
+    box-shadow:var(--shadow);
+  }
+
+  .welcome-card{
+    background:var(--paper-dim);
+    border-inline-start:4px solid var(--gold-500);
+    border-radius:14px;
+    padding:26px 28px;
+    margin-bottom:32px;
+    font-size:1.03rem;
+    color:var(--teal-900);
+    box-shadow:none;
+    border-block:1px solid transparent;
+    border-inline-end:1px solid transparent;
+  }
+  .welcome-card p{margin:0;}
+
+  .section-label{
+    font-size:13px;
+    font-weight:700;
+    color:var(--gold-600);
+    margin:0 0 4px;
+  }
+  .section-title{
+    font-size:1.3rem;
+    font-weight:700;
+    color:var(--teal-900);
+    margin:0 0 18px;
+  }
+
+  .field-row{
+    display:grid;
+    grid-template-columns:1fr;
+    gap:16px;
+  }
+  @media(min-width:560px){
+    .field-row{grid-template-columns:1fr 1fr 1fr;}
+  }
+  .field label{
+    display:block;
+    font-size:13.5px;
+    font-weight:600;
+    color:var(--ink-soft);
+    margin-bottom:6px;
+  }
+  .field input{
+    width:100%;
+    border:none;
+    border-bottom:2px solid var(--line);
+    background:transparent;
+    padding:9px 2px;
+    font-size:15.5px;
+    color:var(--ink);
+    outline:none;
+    transition:border-color .2s ease;
+  }
+  .field input:focus{border-color:var(--gold-500);}
+
+  .dropzone{
+    border:2px dashed var(--line);
+    border-radius:14px;
+    padding:34px 18px;
+    text-align:center;
+    color:var(--ink-soft);
+    transition:border-color .2s ease, background .2s ease;
+    cursor:pointer;
+  }
+  .dropzone.dragover{
+    border-color:var(--gold-500);
+    background:var(--gold-100);
+  }
+  .dropzone svg{margin:0 auto 12px;}
+  .dropzone .hint{font-size:14.5px;}
+  .file-chip{
+    margin-top:14px;
+    display:inline-flex;
+    align-items:center;
+    gap:8px;
+    background:var(--paper-dim);
+    border-radius:999px;
+    padding:8px 16px;
+    font-size:13.5px;
+    color:var(--teal-900);
+  }
+  .file-chip button{
+    background:none;border:none;color:var(--coral-500);font-weight:700;font-size:15px;padding:0;line-height:1;
+  }
+
+  .prompt-hint{
+    font-size:14.5px;
+    color:var(--ink-soft);
+    margin:0 0 14px;
+  }
+  .prompt-box{
+    background:var(--teal-900);
+    color:var(--paper);
+    border-radius:12px;
+    padding:20px;
+    font-size:13.5px;
+    line-height:1.85;
+    white-space:pre-wrap;
+    max-height:230px;
+    overflow-y:auto;
+    margin-bottom:14px;
+  }
+  .copy-btn{
+    display:inline-flex;
+    align-items:center;
+    gap:8px;
+    background:transparent;
+    border:1.5px solid var(--teal-900);
+    color:var(--teal-900);
+    padding:9px 18px;
+    border-radius:999px;
+    font-size:14px;
+    font-weight:600;
+    transition:background .2s ease, color .2s ease;
+  }
+  .copy-btn:hover{background:var(--teal-900);color:var(--paper);}
+  .copy-btn.copied{background:var(--gold-500);border-color:var(--gold-500);color:var(--teal-900);}
+
+  .analyze-btn{
+    display:block;
+    width:100%;
+    background:var(--gold-500);
+    color:var(--teal-900);
+    border:none;
+    padding:16px;
+    border-radius:14px;
+    font-size:16.5px;
+    font-weight:700;
+    box-shadow:0 10px 24px rgba(227,162,60,0.35);
+    transition:transform .15s ease, box-shadow .15s ease, opacity .15s ease;
+  }
+  .analyze-btn:hover{transform:translateY(-1px);box-shadow:0 14px 28px rgba(227,162,60,0.42);}
+  .analyze-btn:disabled{opacity:0.55;cursor:not-allowed;transform:none;box-shadow:none;}
+
+  .status-msg{
+    text-align:center;
+    font-size:14.5px;
+    margin-top:14px;
+    color:var(--ink-soft);
+  }
+  .status-msg.error{color:var(--coral-500);}
+
+  .spinner{
+    display:inline-block;
+    width:16px;height:16px;
+    border:2.5px solid var(--line);
+    border-top-color:var(--gold-500);
+    border-radius:50%;
+    animation:spin .8s linear infinite;
+    vertical-align:middle;
+    margin-inline-end:8px;
+  }
+  @keyframes spin{to{transform:rotate(360deg);}}
+
+  .results-card{display:none;}
+  .results-card.show{display:block;}
+  .revision-block{
+    margin-top:26px;
+    padding-top:24px;
+    border-top:1px solid var(--line);
+  }
+  .revision-block .results-card{
+    margin-top:22px;
+    box-shadow:none;
+    border-color:var(--line);
+    background:var(--paper-dim);
+    padding:24px;
+  }
+  .results-body h1,.results-body h2,.results-body h3{color:var(--teal-900);margin-top:22px;margin-bottom:8px;}
+  .results-body p{margin:0 0 12px;color:var(--ink);}
+  .results-body ul{margin:0 0 14px;padding-inline-start:22px;}
+  .results-body li{margin-bottom:6px;}
+  .results-body table{
+    width:100%;
+    border-collapse:collapse;
+    margin:14px 0 20px;
+    font-size:14px;
+  }
+  .results-body th,.results-body td{
+    border:1px solid var(--line);
+    padding:10px 12px;
+    text-align:start;
+    vertical-align:top;
+  }
+  .results-body th{
+    background:var(--paper-dim);
+    color:var(--teal-900);
+    font-weight:700;
+  }
+  .results-body strong{color:var(--teal-900);}
+
+  footer{
+    text-align:center;
+    font-size:13.5px;
+    color:var(--ink-soft);
+    padding:28px 20px 40px;
+    border-top:1px solid var(--line);
+    margin-top:8px;
+  }
+
+  @media (prefers-reduced-motion: reduce){
+    *{animation-duration:0.001ms !important; transition-duration:0.001ms !important;}
+  }
+</style>
+</head>
+<body class="lang-ar">
+
+<div class="hero">
+  <div class="hero-inner">
+    <div class="lang-switch" id="langSwitch">
+      <button data-lang="ar" class="active">العربية</button>
+      <button data-lang="he">עברית</button>
+      <button data-lang="en">English</button>
+    </div>
+    <h1 class="brand-title" id="txt-title">ومضات ذكية</h1>
+    <p class="brand-subtitle" id="txt-subtitle">المنصة الذكية لبناء الامتحانات</p>
+    <div class="logo-frame">
+      <img src="https://cdn.imagetourls.com/uploads/tyImg/s5tKRhPl.jpg" alt="Logo">
+    </div>
+    <span class="manager-tag" id="txt-manager">بإدارة: منى مصطفى</span>
+  </div>
+</div>
+
+<main>
+
+  <div class="welcome-card">
+    <p id="txt-welcome">أهلاً بك أيها المعلم الكريم، هذه المنصة رفيقتك في مراجعة امتحاناتك، وفحص بنائها وجودتها، والتأكد من ملاءمتها كأداة تقييم دقيقة وعادلة لطلابك.</p>
+  </div>
+
+  <div class="card">
+    <p class="section-label" id="txt-step1-label">01</p>
+    <h2 class="section-title" id="txt-formtitle">بيانات المعلّم</h2>
+    <div class="field-row">
+      <div class="field">
+        <label id="txt-namelabel" for="teacherName">اسمك</label>
+        <input type="text" id="teacherName" placeholder="اكتب اسمك هنا">
+      </div>
+      <div class="field">
+        <label id="txt-gradelabel" for="teacherGrade">الصف</label>
+        <input type="text" id="teacherGrade" placeholder="مثال: الصف الثامن">
+      </div>
+      <div class="field">
+        <label id="txt-subjectlabel" for="teacherSubject">الموضوع</label>
+        <input type="text" id="teacherSubject" placeholder="مثال: العلوم">
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2 class="section-title" id="txt-uploadtitle">ارفع امتحانك</h2>
+    <div class="dropzone" id="dropzone">
+      <svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="#54655F" stroke-width="1.6"><path d="M12 3v12m0-12 4 4m-4-4-4 4"/><path d="M4 17v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-2"/></svg>
+      <p class="hint" id="txt-uploadhint">اسحب الملف هنا أو اضغط للاختيار (Word أو PDF)</p>
+      <input type="file" id="fileInput" accept=".docx,.doc,.pdf" style="display:none;">
+    </div>
+    <div id="fileChipWrap"></div>
+  </div>
+
+  <div class="card">
+    <button class="analyze-btn" id="analyzeBtn">احصل على التحليل الآن</button>
+    <div class="status-msg" id="statusMsg"></div>
+  </div>
+
+  <div class="card results-card" id="resultsCard">
+    <h2 class="section-title" id="txt-resultstitle">نتيجة التحليل</h2>
+    <div class="results-body" id="resultsBody"></div>
+
+    <div class="revision-block" id="revisionBlock" style="display:none;">
+      <button class="copy-btn" id="revisionBtn" style="width:100%;justify-content:center;padding:13px;"></button>
+      <div class="status-msg" id="revisionStatus"></div>
+      <div class="results-card" id="revisedCard">
+        <h2 class="section-title" id="txt-revisedtitle"></h2>
+        <div class="results-body" id="revisedBody"></div>
+      </div>
+    </div>
+  </div>
+
+</main>
+
+<footer id="txt-footer">صُممت هذه المنصة لدعم المعلمين في رحلتهم نحو تقييم أفضل</footer>
+
+<script>
+if (window.pdfjsLib) {
+  pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+}
+
+const PROMPTS = {
+ar: `أنت خبير في التقييم والقياس التربوي، ومختص في بناء وتحليل الاختبارات (تحديداً لمادة [[SUBJECT]] لطلاب [[GRADE]]). سأرفق لك نص امتحان، وأطلب منك فحصه وتحليله بدقة بناءً على المعايير التربوية التالية:
+
+* سلم بلوم: هل أسئلة الامتحان مبنية ومتدرجة بشكل صحيح حسب مستويات سلم بلوم المعرفي؟
+* ملاءمة الجيل: هل المهارات التي يتناولها الامتحان مناسبة للقدرات العقلية والمعرفية لطلاب [[GRADE]]؟
+* توزيع العلامات (قاعدة 60%): هل تقسيم العلامات مناسب؟ يرجى التحقق وتأكيد ما إذا كان 60% من إجمالي علامات الامتحان موزعة بشكل صحيح على الأسئلة التي تقيس مستويات (المعرفة، الفهم، والتطبيق).
+* التقييم التشخيصي: هل تركيبة الامتحان وتنوع مستويات الصعوبة فيه تجعله مناسباً للاستخدام كأداة مسح صفي فعالة؟
+* الصدق والثبات: هل الامتحان صالح وموثوق؟ (هل يقيس فعلاً ما صُمم لقياسه، وهل صياغة الأسئلة واضحة علمياً ولا تحتمل التأويل لضمان ثبات النتائج؟).
+* المدة الزمنية: هل حجم الامتحان ومستوى تعقيد الأسئلة مناسب لحله من قبل الطلاب في مدة زمنية أقصاها 90 دقيقة؟
+
+المخرجات المطلوبة (بهذا الترتيب بالضبط):
+
+أولاً - شرح تفصيلي: قدّم شرحاً واضحاً ومفصلاً حول مبنى الامتحان ككل، يتناول كل معيار من المعايير أعلاه على حدة (سلم بلوم، ملاءمة الجيل، توزيع العلامات، التقييم التشخيصي، الصدق والثبات، المدة الزمنية)، ويوضح نقاط القوة ونقاط الضعف في بناء الامتحان بشكل عام.
+
+ثانياً - جدول التعديلات: بعد الشرح، اعرض جدولاً يلخّص كل سؤال أو قسم يحتاج إلى تعديل، بالتنسيق التالي فقط:
+
+| القسم | رقم السؤال | الخطأ (الضعف في السؤال) | الاقتراح للتعديل |
+| --- | --- | --- | --- |
+|  |  |  |  |
+|  |  |  |  |
+
+ثالثاً - ملخص ختامي: بعد الجدول، اكتبي فقرة ختامية موجزة بعنوان "الخلاصة" تتضمن:
+1) تقييماً عاماً واحداً فقط للامتحان، اختاري إحدى العبارات التالية بالضبط: "جيد" أو "جيد جداً" أو "ممتاز".
+2) إن وُجدت نصائح للتعديل، اذكريها في نقاط مختصرة وواضحة (2-5 نقاط كحد أقصى)؛ وإن كان الامتحان لا يحتاج أي تعديل فصرّحي بذلك بوضوح.
+
+نص الامتحان (مادة [[SUBJECT]]، [[GRADE]]):
+[[EXAM_TEXT]]`,
+
+he: `את/ה מומחה/ית להערכה ומדידה חינוכית, ומתמחה בבניית וניתוח מבחנים (בדגש על מקצוע [[SUBJECT]] עבור תלמידי [[GRADE]]). אני אצרף טקסט של מבחן, ואבקש ממך לבדוק ולנתח אותו בקפידה לפי הקריטריונים החינוכיים הבאים:
+
+* סולם בלום: האם שאלות המבחן בנויות ומדורגות כראוי לפי רמות הטקסונומיה הקוגניטיבית של בלום?
+* התאמה לגיל: האם המיומנויות הנבחנות מתאימות ליכולות השכליות והקוגניטיביות של תלמידי [[GRADE]]?
+* חלוקת הציונים (כלל ה-60%): האם חלוקת הציונים מתאימה? אנא בדוק/י ואשר/י האם 60% מסך נקודות המבחן מחולקות כראוי בין שאלות הבודקות ידע, הבנה ויישום.
+* הערכה מאבחנת: האם מבנה המבחן ומגוון רמות הקושי בו הופכים אותו לכלי סקר כיתתי יעיל?
+* תוקף ומהימנות: האם המבחן תקף ומהימן? (האם הוא אכן בודק את מה שנועד לבדוק, והאם ניסוח השאלות ברור מבחינה מדעית ואינו מותיר מקום לפרשנויות שונות?).
+* משך הזמן: האם היקף המבחן ורמת המורכבות של השאלות מתאימים לפתרון בזמן מרבי של 90 דקות?
+
+הפלט הנדרש (בסדר הזה בדיוק):
+
+ראשית - הסבר מפורט: הציגי הסבר ברור ומפורט על מבנה המבחן בכללותו, תוך התייחסות לכל אחד מהקריטריונים לעיל בנפרד (סולם בלום, התאמה לגיל, חלוקת הציונים, הערכה מאבחנת, תוקף ומהימנות, משך הזמן), והבהירי את נקודות החוזק והחולשה בבניית המבחן.
+
+שנית - טבלת תיקונים: לאחר ההסבר, הציגי טבלה המסכמת כל שאלה או חלק הדורשים תיקון, בפורמט הבא בלבד:
+
+| חלק | מספר שאלה | הבעיה (החולשה בשאלה) | הצעה לתיקון |
+| --- | --- | --- | --- |
+|  |  |  |  |
+|  |  |  |  |
+
+שלישית - סיכום מסכם: לאחר הטבלה, כתבי פסקת סיכום קצרה תחת הכותרת "סיכום" הכוללת:
+1) דירוג כללי אחד בלבד למבחן, בחרי בדיוק אחת מהאפשרויות הבאות: "טוב", "טוב מאוד" או "מצוין".
+2) אם יש המלצות לתיקון, ציינו אותן בנקודות קצרות וברורות (2-5 נקודות לכל היותר); ואם המבחן אינו זקוק לשום תיקון, ציינו זאת במפורש.
+
+טקסט המבחן (מקצוע [[SUBJECT]], [[GRADE]]):
+[[EXAM_TEXT]]`,
+
+en: `You are an expert in educational assessment and measurement, specializing in building and analyzing exams (specifically for the subject of [[SUBJECT]] at the level of [[GRADE]]). I will attach an exam text, and I ask you to examine and analyze it carefully according to the following educational criteria:
+
+* Bloom's Taxonomy: Are the exam questions built and graded correctly according to the levels of Bloom's cognitive taxonomy?
+* Age Appropriateness: Are the skills addressed by the exam suitable for the mental and cognitive abilities of [[GRADE]] students?
+* Mark Distribution (the 60% rule): Is the mark distribution appropriate? Please verify whether 60% of the total exam marks are correctly allocated to questions measuring knowledge, comprehension, and application.
+* Diagnostic Assessment: Do the exam's composition and range of difficulty levels make it suitable as an effective classroom screening tool?
+* Validity and Reliability: Is the exam valid and reliable? (Does it measure what it was designed to measure, and is the wording scientifically clear with no room for misinterpretation?)
+* Time Allotment: Is the size and complexity of the exam appropriate for students to complete within a maximum of 90 minutes?
+
+Required Output (in this exact order):
+
+First - Detailed explanation: Give a clear, detailed explanation of the exam's overall structure, addressing each of the criteria above individually (Bloom's Taxonomy, Age Appropriateness, Mark Distribution, Diagnostic Assessment, Validity and Reliability, Time Allotment), and clarify the strengths and weaknesses in how the exam is built.
+
+Second - Revisions table: After the explanation, present a table summarizing every question or section that needs revision, in the following format only:
+
+| Section | Question Number | The Issue (weakness) | Suggested Revision |
+| --- | --- | --- | --- |
+|  |  |  |  |
+|  |  |  |  |
+
+Third - Final summary: After the table, write a short closing paragraph titled "Summary" that includes:
+1) One single overall rating for the exam, choosing exactly one of: "Good", "Very Good", or "Excellent".
+2) If there are tips for revision, list them in brief, clear bullet points (2-5 points maximum); if the exam needs no revisions at all, state that clearly.
+
+Exam text (subject: [[SUBJECT]], level: [[GRADE]]):
+[[EXAM_TEXT]]`
+};
+
+const T = {
+ar:{dir:'rtl', font:'lang-ar', title:'ومضات ذكية', subtitle:'المنصة الذكية لبناء الامتحانات', manager:'بإدارة: منى مصطفى',
+  welcome:'أهلاً بك أيها المعلم الكريم، هذه المنصة رفيقتك في مراجعة امتحاناتك، وفحص بنائها وجودتها، والتأكد من ملاءمتها كأداة تقييم دقيقة وعادلة لطلابك.',
+  formtitle:'بيانات المعلّم', step1:'01', namelabel:'اسمك', nameph:'اكتب اسمك هنا',
+  gradelabel:'الصف', gradeph:'مثال: الصف الثامن', subjectlabel:'الموضوع', subjectph:'مثال: العلوم',
+  uploadtitle:'ارفع امتحانك', uploadhint:'اسحب الملف هنا أو اضغط للاختيار (Word أو PDF)', uploadedFile:'الملف المرفوع:', remove:'إزالة',
+  prompttitle:'نص التحليل الجاهز', prompthint:'انسخي النص التالي وألصقيه مباشرة مع نص الامتحان في محرك الذكاء الاصطناعي:',
+  copybtn:'نسخ النص', copied:'تم النسخ!', analyzebtn:'احصل على التحليل الآن', analyzing:'جارٍ تحليل الامتحان...',
+  resultstitle:'نتيجة التحليل', errorNoFile:'الرجاء رفع ملف الامتحان أولاً (Word أو PDF)', errorGeneral:'حدث خطأ أثناء التحليل، حاولي مرة أخرى',
+  errorParse:'تعذّرت قراءة الملف، جرّبي ملفاً آخر', footer:'صُممت هذه المنصة لدعم المعلمين في رحلتهم نحو تقييم أفضل',
+  revisionbtn:'اطلب اقتراح امتحان معدّل بناءً على هذا التحليل', revisionloading:'جارٍ إعداد الامتحان المعدّل...', revisedtitle:'الامتحان المعدّل المقترح', revisionerror:'تعذّر إعداد الامتحان المعدّل، حاولي مرة أخرى'},
+
+he:{dir:'rtl', font:'lang-he', title:'ניצוצות חכמים', subtitle:'הפלטפורמה החכמה לבניית מבחנים', manager:'בניהול: מונא מוסטפא',
+  welcome:'ברוכה הבאה, מורה יקרה. פלטפורמה זו נועדה ללוות אותך בבדיקת המבחנים שלך, בבחינת המבנה והאיכות שלהם, ובווידוא התאמתם ככלי הערכה מדויק והוגן לתלמידייך.',
+  formtitle:'פרטי המורה', step1:'01', namelabel:'שמך', nameph:'כתבי כאן את שמך',
+  gradelabel:'כיתה', gradeph:"לדוגמה: כיתה ח'", subjectlabel:'נושא', subjectph:'לדוגמה: מדעים',
+  uploadtitle:'העלי את המבחן שלך', uploadhint:'גררי קובץ לכאן או לחצי לבחירה (Word או PDF)', uploadedFile:'הקובץ שהועלה:', remove:'הסרה',
+  prompttitle:'טקסט הניתוח המוכן', prompthint:'העתיקי את הטקסט הבא והדביקי אותו יחד עם טקסט המבחן במנוע הבינה המלאכותית:',
+  copybtn:'העתקת הטקסט', copied:'הועתק!', analyzebtn:'קבלי את הניתוח עכשיו', analyzing:'המבחן נבדק כעת...',
+  resultstitle:'תוצאות הניתוח', errorNoFile:'יש להעלות קודם את קובץ המבחן (Word או PDF)', errorGeneral:'אירעה שגיאה בניתוח, נסי שוב',
+  errorParse:'לא ניתן היה לקרוא את הקובץ, נסי קובץ אחר', footer:'פלטפורמה זו נבנתה כדי לתמוך במורות ובמורים במסע לקראת הערכה טובה יותר',
+  revisionbtn:'בקשי הצעה למבחן מתוקן על סמך הניתוח הזה', revisionloading:'המבחן המתוקן בהכנה...', revisedtitle:'המבחן המתוקן המוצע', revisionerror:'לא ניתן היה להכין את המבחן המתוקן, נסי שוב'},
+
+en:{dir:'ltr', font:'lang-en', title:'Smart Sparks', subtitle:'The Smart Platform for Building Exams', manager:'Managed by: Mona Mostafa',
+  welcome:'Welcome, dear teacher. This platform is here to support you in reviewing your exams, examining their structure and quality, and confirming how well they work as a fair, accurate assessment tool for your students.',
+  formtitle:"Teacher details", step1:'01', namelabel:'Your name', nameph:'Type your name here',
+  gradelabel:'Grade', gradeph:'e.g. Grade 8', subjectlabel:'Subject', subjectph:'e.g. Science',
+  uploadtitle:'Upload your exam', uploadhint:'Drag a file here or click to choose (Word or PDF)', uploadedFile:'Uploaded file:', remove:'Remove',
+  prompttitle:'Ready-made analysis prompt', prompthint:'Copy the text below and paste it together with your exam text into an AI engine:',
+  copybtn:'Copy text', copied:'Copied!', analyzebtn:'Get the analysis now', analyzing:'Analyzing your exam...',
+  resultstitle:'Analysis results', errorNoFile:'Please upload the exam file first (Word or PDF)', errorGeneral:'Something went wrong, please try again',
+  errorParse:'Could not read the file, try another one', footer:'This platform was built to support teachers on their way to better assessment',
+  revisionbtn:'Request a revised exam based on this analysis', revisionloading:'Preparing the revised exam...', revisedtitle:'Suggested revised exam', revisionerror:'Could not prepare the revised exam, please try again'}
+};
+
+const REVISION_REQUESTS = {
+  ar: 'بناءً على تحليلك أعلاه، أعيدي صياغة الامتحان بالكامل كنسخة معدّلة تُصلح كل نقاط الضعف التي ذكرتها، مع الحفاظ على نفس المادة والمستوى وعدد الأسئلة قدر الإمكان. اعرضي الامتحان المعدّل كاملاً بصيغة واضحة ومنظمة (الأسئلة وتوزيع العلامات لكل سؤال)، دون أي شرح إضافي قبله.',
+  he: 'בהתבסס על הניתוח שלך למעלה, נסחי מחדש את המבחן במלואו לגרסה מתוקנת שמתקנת את כל נקודות החולשה שציינת, תוך שמירה על אותו נושא, רמה ומספר שאלות ככל האפשר. הציגי את המבחן המתוקן במלואו בפורמט ברור ומאורגן (שאלות וניקוד לכל שאלה), ללא הסבר נוסף לפניו.',
+  en: 'Based on your analysis above, rewrite the exam in full as a revised version that fixes all the weaknesses you mentioned, keeping the same subject, level, and number of questions as much as possible. Present the full revised exam in a clear, organized format (questions with marks for each), with no extra explanation before it.'
+};
+
+let currentLang = 'ar';
+let uploadedFile = null;
+let extractedText = '';
+let lastPromptText = null;
+let lastAnalysisText = null;
+
+const DEFAULTS = {
+  ar: { grade: 'المرحلة الإعدادية', subject: 'العلوم' },
+  he: { grade: 'חטיבת הביניים', subject: 'מדעים' },
+  en: { grade: 'middle school', subject: 'Science' }
+};
+
+function buildPrompt(lang, examText){
+  const gradeInput = document.getElementById('teacherGrade').value.trim();
+  const subjectInput = document.getElementById('teacherSubject').value.trim();
+  const grade = gradeInput || DEFAULTS[lang].grade;
+  const subject = subjectInput || DEFAULTS[lang].subject;
+  return PROMPTS[lang]
+    .split('[[GRADE]]').join(grade)
+    .split('[[SUBJECT]]').join(subject)
+    .replace('[[EXAM_TEXT]]', examText.slice(0, 12000));
+}
+
+function applyLang(lang){
+  currentLang = lang;
+  const t = T[lang];
+  document.documentElement.setAttribute('lang', lang);
+  document.documentElement.setAttribute('dir', t.dir);
+  document.body.className = t.font;
+
+  document.getElementById('txt-title').textContent = t.title;
+  document.getElementById('txt-subtitle').textContent = t.subtitle;
+  document.getElementById('txt-manager').textContent = t.manager;
+  document.getElementById('txt-welcome').textContent = t.welcome;
+  document.getElementById('txt-step1-label').textContent = t.step1;
+  document.getElementById('txt-formtitle').textContent = t.formtitle;
+  document.getElementById('txt-namelabel').textContent = t.namelabel;
+  document.getElementById('teacherName').placeholder = t.nameph;
+  document.getElementById('txt-gradelabel').textContent = t.gradelabel;
+  document.getElementById('teacherGrade').placeholder = t.gradeph;
+  document.getElementById('txt-subjectlabel').textContent = t.subjectlabel;
+  document.getElementById('teacherSubject').placeholder = t.subjectph;
+  document.getElementById('txt-uploadtitle').textContent = t.uploadtitle;
+  document.getElementById('txt-uploadhint').textContent = t.uploadhint;
+  document.getElementById('analyzeBtn').textContent = t.analyzebtn;
+  document.getElementById('txt-resultstitle').textContent = t.resultstitle;
+  document.getElementById('txt-footer').textContent = t.footer;
+  document.getElementById('revisionBtn').textContent = t.revisionbtn;
+  document.getElementById('txt-revisedtitle').textContent = t.revisedtitle;
+
+  document.querySelectorAll('.lang-switch button').forEach(b=>{
+    b.classList.toggle('active', b.dataset.lang === lang);
+  });
+
+  renderFileChip();
+}
+
+document.getElementById('langSwitch').addEventListener('click', (e)=>{
+  const btn = e.target.closest('button[data-lang]');
+  if(btn) applyLang(btn.dataset.lang);
+});
+
+function renderFileChip(){
+  const wrap = document.getElementById('fileChipWrap');
+  wrap.innerHTML = '';
+  if(!uploadedFile) return;
+  const chip = document.createElement('div');
+  chip.className = 'file-chip';
+  chip.innerHTML = `<span>${T[currentLang].uploadedFile} ${uploadedFile.name}</span>`;
+  const rm = document.createElement('button');
+  rm.textContent = '×';
+  rm.title = T[currentLang].remove;
+  rm.addEventListener('click', ()=>{
+    uploadedFile = null; extractedText = '';
+    document.getElementById('fileInput').value = '';
+    renderFileChip(); updatePromptBox();
+  });
+  chip.appendChild(rm);
+  wrap.appendChild(chip);
+}
+
+async function extractTextFromFile(file){
+  const ext = file.name.split('.').pop().toLowerCase();
+  if(ext === 'docx'){
+    const arrayBuffer = await file.arrayBuffer();
+    const result = await mammoth.extractRawText({arrayBuffer});
+    return result.value;
+  } else if(ext === 'pdf'){
+    const arrayBuffer = await file.arrayBuffer();
+    const pdf = await pdfjsLib.getDocument({data: arrayBuffer}).promise;
+    let text = '';
+    for(let i=1;i<=pdf.numPages;i++){
+      const page = await pdf.getPage(i);
+      const content = await page.getTextContent();
+      text += content.items.map(it=>it.str).join(' ') + '\n';
+    }
+    return text;
+  } else {
+    throw new Error('unsupported-format');
+  }
+}
+
+async function handleFile(file){
+  uploadedFile = file;
+  renderFileChip();
+  const statusEl = document.getElementById('statusMsg');
+  statusEl.className = 'status-msg';
+  statusEl.textContent = '';
+  try{
+    extractedText = await extractTextFromFile(file);
+  }catch(err){
+    extractedText = '';
+    statusEl.className = 'status-msg error';
+    statusEl.textContent = T[currentLang].errorParse;
+  }
+}
+
+const dropzone = document.getElementById('dropzone');
+const fileInput = document.getElementById('fileInput');
+dropzone.addEventListener('click', ()=> fileInput.click());
+fileInput.addEventListener('change', (e)=>{
+  if(e.target.files[0]) handleFile(e.target.files[0]);
+});
+['dragover','dragenter'].forEach(evt=>{
+  dropzone.addEventListener(evt, (e)=>{ e.preventDefault(); dropzone.classList.add('dragover'); });
+});
+['dragleave','drop'].forEach(evt=>{
+  dropzone.addEventListener(evt, (e)=>{ e.preventDefault(); dropzone.classList.remove('dragover'); });
+});
+dropzone.addEventListener('drop', (e)=>{
+  const file = e.dataTransfer.files[0];
+  if(file) handleFile(file);
+});
+
+/* ---------- Minimal markdown-ish renderer for the AI response ---------- */
+function renderMarkdown(md){
+  const lines = md.split('\n');
+  let html = '';
+  let inTable = false;
+  let tableRows = [];
+  let inList = false;
+
+  function inline(s){
+    return s.replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>');
+  }
+  function flushTable(){
+    if(tableRows.length === 0) return;
+    let rows = tableRows.filter(r => !/^\s*\|?\s*-{2,}/.test(r.replace(/\|/g,'|')) && !/^[\s|:-]+$/.test(r));
+    let out = '<table>';
+    rows.forEach((r, idx)=>{
+      const cells = r.split('|').map(c=>c.trim()).filter((c,i,arr)=> !(i===0 && c==='') && !(i===arr.length-1 && c===''));
+      const tag = idx === 0 ? 'th' : 'td';
+      out += '<tr>' + cells.map(c=>`<${tag}>${inline(c)}</${tag}>`).join('') + '</tr>';
+    });
+    out += '</table>';
+    html += out;
+    tableRows = [];
+    inTable = false;
+  }
+  function flushList(){
+    if(inList){ html += '</ul>'; inList = false; }
+  }
+
+  lines.forEach(line=>{
+    const trimmed = line.trim();
+    if(/^\|.*\|$/.test(trimmed)){
+      inTable = true;
+      tableRows.push(trimmed);
+      return;
+    } else if(inTable){
+      flushTable();
+    }
+    if(/^\*\s+/.test(trimmed)){
+      if(!inList){ html += '<ul>'; inList = true; }
+      html += `<li>${inline(trimmed.replace(/^\*\s+/, ''))}</li>`;
+      return;
+    } else if(inList){
+      flushList();
+    }
+    if(trimmed === ''){ return; }
+    if(/^#{1,3}\s+/.test(trimmed)){
+      html += `<h3>${inline(trimmed.replace(/^#{1,3}\s+/, ''))}</h3>`;
+      return;
+    }
+    html += `<p>${inline(trimmed)}</p>`;
+  });
+  flushTable();
+  flushList();
+  return html;
+}
+
+document.getElementById('analyzeBtn').addEventListener('click', async ()=>{
+  const statusEl = document.getElementById('statusMsg');
+  const btn = document.getElementById('analyzeBtn');
+  const resultsCard = document.getElementById('resultsCard');
+  const resultsBody = document.getElementById('resultsBody');
+  const revisionBlock = document.getElementById('revisionBlock');
+  const revisedCard = document.getElementById('revisedCard');
+
+  if(!extractedText){
+    statusEl.className = 'status-msg error';
+    statusEl.textContent = T[currentLang].errorNoFile;
+    return;
+  }
+
+  btn.disabled = true;
+  statusEl.className = 'status-msg';
+  statusEl.innerHTML = `<span class="spinner"></span>${T[currentLang].analyzing}`;
+  resultsCard.classList.remove('show');
+  revisionBlock.style.display = 'none';
+  revisedCard.classList.remove('show');
+
+  const promptText = buildPrompt(currentLang, extractedText);
+
+  try{
+    const response = await fetch("https://api.anthropic.com/v1/messages", {
+      method: "POST",
+      headers: {"Content-Type": "application/json"},
+      body: JSON.stringify({
+        model: "claude-sonnet-4-6",
+        max_tokens: 1000,
+        messages: [{ role: "user", content: promptText }]
+      })
+    });
+    const data = await response.json();
+    const textBlocks = (data.content || []).filter(b=>b.type === "text").map(b=>b.text);
+    const fullText = textBlocks.join('\n\n');
+    if(!fullText){ throw new Error('empty-response'); }
+    resultsBody.innerHTML = renderMarkdown(fullText);
+    resultsCard.classList.add('show');
+    statusEl.textContent = '';
+    lastPromptText = promptText;
+    lastAnalysisText = fullText;
+    revisionBlock.style.display = 'block';
+    document.getElementById('revisionStatus').textContent = '';
+    resultsCard.scrollIntoView({behavior:'smooth', block:'start'});
+  }catch(err){
+    statusEl.className = 'status-msg error';
+    statusEl.textContent = T[currentLang].errorGeneral;
+  }finally{
+    btn.disabled = false;
+  }
+});
+
+document.getElementById('revisionBtn').addEventListener('click', async ()=>{
+  if(!lastPromptText || !lastAnalysisText) return;
+  const revisionStatus = document.getElementById('revisionStatus');
+  const revisedCard = document.getElementById('revisedCard');
+  const revisedBody = document.getElementById('revisedBody');
+  const btn = document.getElementById('revisionBtn');
+
+  btn.disabled = true;
+  revisedCard.classList.remove('show');
+  revisionStatus.className = 'status-msg';
+  revisionStatus.innerHTML = `<span class="spinner"></span>${T[currentLang].revisionloading}`;
+
+  try{
+    const response = await fetch("https://api.anthropic.com/v1/messages", {
+      method: "POST",
+      headers: {"Content-Type": "application/json"},
+      body: JSON.stringify({
+        model: "claude-sonnet-4-6",
+        max_tokens: 1000,
+        messages: [
+          { role: "user", content: lastPromptText },
+          { role: "assistant", content: lastAnalysisText },
+          { role: "user", content: REVISION_REQUESTS[currentLang] }
+        ]
+      })
+    });
+    const data = await response.json();
+    const textBlocks = (data.content || []).filter(b=>b.type === "text").map(b=>b.text);
+    const fullText = textBlocks.join('\n\n');
+    if(!fullText){ throw new Error('empty-response'); }
+    revisedBody.innerHTML = renderMarkdown(fullText);
+    revisedCard.classList.add('show');
+    revisionStatus.textContent = '';
+    revisedCard.scrollIntoView({behavior:'smooth', block:'start'});
+  }catch(err){
+    revisionStatus.className = 'status-msg error';
+    revisionStatus.textContent = T[currentLang].revisionerror;
+  }finally{
+    btn.disabled = false;
+  }
+});
+
+applyLang('ar');
+</script>
+</body>
+</html>
