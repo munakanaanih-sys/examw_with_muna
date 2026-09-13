@@ -288,6 +288,7 @@
     color:var(--ink-soft);
   }
   .status-msg.error{color:var(--coral-500);}
+  .fallback-block{margin-top:18px;padding-top:18px;border-top:1px solid var(--line);}
 
   .spinner{
     display:inline-block;
@@ -408,6 +409,14 @@
   <div class="card">
     <button class="analyze-btn" id="analyzeBtn">احصل على التحليل الآن</button>
     <div class="status-msg" id="statusMsg"></div>
+
+    <div class="fallback-block" id="fallbackBlock" style="display:none;">
+      <p class="prompt-hint" id="txt-fallbackhint"></p>
+      <div class="prompt-box" id="fallbackPromptBox"></div>
+      <button class="copy-btn" id="fallbackCopyBtn">
+        <span id="fallbackCopyLabel"></span>
+      </button>
+    </div>
   </div>
 
   <div class="card results-card" id="resultsCard">
@@ -526,7 +535,8 @@ ar:{dir:'rtl', font:'lang-ar', title:'ومضات ذكية', subtitle:'المنص
   copybtn:'نسخ النص', copied:'تم النسخ!', analyzebtn:'احصل على التحليل الآن', analyzing:'جارٍ تحليل الامتحان...',
   resultstitle:'نتيجة التحليل', errorNoFile:'الرجاء رفع ملف الامتحان أولاً (Word أو PDF)', errorGeneral:'حدث خطأ أثناء التحليل، حاولي مرة أخرى',
   errorParse:'تعذّرت قراءة الملف، جرّبي ملفاً آخر', footer:'صُممت هذه المنصة لدعم المعلمين في رحلتهم نحو تقييم أفضل',
-  revisionbtn:'اطلب اقتراح امتحان معدّل بناءً على هذا التحليل', revisionloading:'جارٍ إعداد الامتحان المعدّل...', revisedtitle:'الامتحان المعدّل المقترح', revisionerror:'تعذّر إعداد الامتحان المعدّل، حاولي مرة أخرى'},
+  revisionbtn:'اطلب اقتراح امتحان معدّل بناءً على هذا التحليل', revisionloading:'جارٍ إعداد الامتحان المعدّل...', revisedtitle:'الامتحان المعدّل المقترح', revisionerror:'تعذّر إعداد الامتحان المعدّل، حاولي مرة أخرى',
+  fallbackhint:'التحليل التلقائي لا يعمل من هذا الموقع. انسخي النص التالي وألصقيه مباشرة في أي محرك ذكاء اصطناعي (مثل Claude أو ChatGPT) للحصول على نفس التحليل:', fallbackcopy:'نسخ النص', fallbackcopied:'تم النسخ!'},
 
 he:{dir:'rtl', font:'lang-he', title:'ניצוצות חכמים', subtitle:'הפלטפורמה החכמה לבניית מבחנים', manager:'בניהול: מונא מוסטפא',
   welcome:'ברוכה הבאה, מורה יקרה. פלטפורמה זו נועדה ללוות אותך בבדיקת המבחנים שלך, בבחינת המבנה והאיכות שלהם, ובווידוא התאמתם ככלי הערכה מדויק והוגן לתלמידייך.',
@@ -537,7 +547,8 @@ he:{dir:'rtl', font:'lang-he', title:'ניצוצות חכמים', subtitle:'הפ
   copybtn:'העתקת הטקסט', copied:'הועתק!', analyzebtn:'קבלי את הניתוח עכשיו', analyzing:'המבחן נבדק כעת...',
   resultstitle:'תוצאות הניתוח', errorNoFile:'יש להעלות קודם את קובץ המבחן (Word או PDF)', errorGeneral:'אירעה שגיאה בניתוח, נסי שוב',
   errorParse:'לא ניתן היה לקרוא את הקובץ, נסי קובץ אחר', footer:'פלטפורמה זו נבנתה כדי לתמוך במורות ובמורים במסע לקראת הערכה טובה יותר',
-  revisionbtn:'בקשי הצעה למבחן מתוקן על סמך הניתוח הזה', revisionloading:'המבחן המתוקן בהכנה...', revisedtitle:'המבחן המתוקן המוצע', revisionerror:'לא ניתן היה להכין את המבחן המתוקן, נסי שוב'},
+  revisionbtn:'בקשי הצעה למבחן מתוקן על סמך הניתוח הזה', revisionloading:'המבחן המתוקן בהכנה...', revisedtitle:'המבחן המתוקן המוצע', revisionerror:'לא ניתן היה להכין את המבחן המתוקן, נסי שוב',
+  fallbackhint:'הניתוח האוטומטי אינו פועל מהאתר הזה. העתיקי את הטקסט הבא והדביקי אותו ישירות בכל מנוע בינה מלאכותית (כמו Claude או ChatGPT) כדי לקבל את אותו ניתוח:', fallbackcopy:'העתקת הטקסט', fallbackcopied:'הועתק!'},
 
 en:{dir:'ltr', font:'lang-en', title:'Smart Sparks', subtitle:'The Smart Platform for Building Exams', manager:'Managed by: Mona Mostafa',
   welcome:'Welcome, dear teacher. This platform is here to support you in reviewing your exams, examining their structure and quality, and confirming how well they work as a fair, accurate assessment tool for your students.',
@@ -548,7 +559,8 @@ en:{dir:'ltr', font:'lang-en', title:'Smart Sparks', subtitle:'The Smart Platfor
   copybtn:'Copy text', copied:'Copied!', analyzebtn:'Get the analysis now', analyzing:'Analyzing your exam...',
   resultstitle:'Analysis results', errorNoFile:'Please upload the exam file first (Word or PDF)', errorGeneral:'Something went wrong, please try again',
   errorParse:'Could not read the file, try another one', footer:'This platform was built to support teachers on their way to better assessment',
-  revisionbtn:'Request a revised exam based on this analysis', revisionloading:'Preparing the revised exam...', revisedtitle:'Suggested revised exam', revisionerror:'Could not prepare the revised exam, please try again'}
+  revisionbtn:'Request a revised exam based on this analysis', revisionloading:'Preparing the revised exam...', revisedtitle:'Suggested revised exam', revisionerror:'Could not prepare the revised exam, please try again',
+  fallbackhint:'Automatic analysis does not work from this website. Copy the text below and paste it directly into any AI engine (such as Claude or ChatGPT) to get the same analysis:', fallbackcopy:'Copy text', fallbackcopied:'Copied!'}
 };
 
 const REVISION_REQUESTS = {
@@ -606,6 +618,8 @@ function applyLang(lang){
   document.getElementById('txt-footer').textContent = t.footer;
   document.getElementById('revisionBtn').textContent = t.revisionbtn;
   document.getElementById('txt-revisedtitle').textContent = t.revisedtitle;
+  document.getElementById('txt-fallbackhint').textContent = t.fallbackhint;
+  document.getElementById('fallbackCopyLabel').textContent = t.fallbackcopy;
 
   document.querySelectorAll('.lang-switch button').forEach(b=>{
     b.classList.toggle('active', b.dataset.lang === lang);
@@ -768,6 +782,7 @@ document.getElementById('analyzeBtn').addEventListener('click', async ()=>{
   resultsCard.classList.remove('show');
   revisionBlock.style.display = 'none';
   revisedCard.classList.remove('show');
+  document.getElementById('fallbackBlock').style.display = 'none';
 
   const promptText = buildPrompt(currentLang, extractedText);
 
@@ -781,6 +796,7 @@ document.getElementById('analyzeBtn').addEventListener('click', async ()=>{
         messages: [{ role: "user", content: promptText }]
       })
     });
+    if(!response.ok){ throw new Error('bad-status'); }
     const data = await response.json();
     const textBlocks = (data.content || []).filter(b=>b.type === "text").map(b=>b.text);
     const fullText = textBlocks.join('\n\n');
@@ -794,11 +810,27 @@ document.getElementById('analyzeBtn').addEventListener('click', async ()=>{
     document.getElementById('revisionStatus').textContent = '';
     resultsCard.scrollIntoView({behavior:'smooth', block:'start'});
   }catch(err){
-    statusEl.className = 'status-msg error';
-    statusEl.textContent = T[currentLang].errorGeneral;
+    statusEl.textContent = '';
+    const fallbackBlock = document.getElementById('fallbackBlock');
+    document.getElementById('fallbackPromptBox').textContent = promptText;
+    fallbackBlock.style.display = 'block';
+    fallbackBlock.scrollIntoView({behavior:'smooth', block:'start'});
   }finally{
     btn.disabled = false;
   }
+});
+
+document.getElementById('fallbackCopyBtn').addEventListener('click', async ()=>{
+  const text = document.getElementById('fallbackPromptBox').textContent;
+  try{
+    await navigator.clipboard.writeText(text);
+    const btn = document.getElementById('fallbackCopyBtn');
+    const label = document.getElementById('fallbackCopyLabel');
+    const original = label.textContent;
+    btn.classList.add('copied');
+    label.textContent = T[currentLang].fallbackcopied;
+    setTimeout(()=>{ btn.classList.remove('copied'); label.textContent = original; }, 1800);
+  }catch(err){}
 });
 
 document.getElementById('revisionBtn').addEventListener('click', async ()=>{
